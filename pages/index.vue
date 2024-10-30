@@ -1,22 +1,35 @@
 <script setup lang="ts">
-import { useRuntimeConfig } from "#app";
-import type { ListType } from "~/components/ListDumb.vue";
+import type { ActiveStock } from "~/utils/type";
 
-// const fetchData = async () => {
-//   const response = await $fetch(
-//     "https://api.polygon.io/v3/reference/tickers?market=stocks&active=true&limit=100&apiKey=RnQFuSytQjGZY11MwIWoPW4hGvv05dXn"
-//   );
-//   return await response;
-// };
+const fetchData = async (): Promise<ActiveStock[]> => {
+  const data = await $fetch<ActiveStock[]>(
+    "https://financialmodelingprep.com/api/v3/stock_market/actives?apikey=Ai7NmAPUE7MqHIsSWf4dgsoSvOa658He"
+  );
 
-// let sample = [];
-// onMounted(() => {
-//   sample = fetchData();
-// });
+  console.log(data);
+  return data.slice(0, 10);
+};
+
+const activeStocks = ref<ActiveStock[]>([]);
+onMounted(async () => {
+  activeStocks.value = await fetchData();
+});
 </script>
 
 <template>
-  <div>
-    <!-- {{ sample }} -->
+  <div class="">
+    <DataTable
+      :value="activeStocks"
+      striped-rows
+      table-style="width: 50px"
+      size="small"
+      class="text-xs"
+    >
+      <Column field="symbol" header="Symbol" />
+      <Column field="name" header="Name" />
+      <Column field="change" header="Change" />
+      <Column field="price" header="Price" />
+      <Column field="changesPercentage" header="Changes Percentage" />
+    </DataTable>
   </div>
 </template>

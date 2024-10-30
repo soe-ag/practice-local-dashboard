@@ -29,11 +29,12 @@ const menuItems = ref([
 ]);
 
 const route = useRoute();
+// bg-[url('/images/pexels-pavel-danilyuk-7234404.jpg')]
 </script>
 
 <template>
   <div
-    class="bg-[url('/images/pexels-pavel-danilyuk-7234404.jpg')] bg-cover bg-fixed bg-blend-overlay bg-center bg-no-repeat h-screen bg-gray-800"
+    class="bg-cover bg-fixed bg-blend-overlay bg-center bg-no-repeat h-screen bg-gray-800"
   >
     <nav class="grid grid-cols-5 items-center p-1">
       <!-- Left Menu Items -->
