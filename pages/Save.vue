@@ -1,66 +1,65 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import type { SaveType } from "~/utils/type";
+// const data = await useFetch("https://v3.football.api-sports.io/leagues", {
+//   method: "GET",
+//   headers: {
+//     "x-rapidapi-host": "v3.football.api-sports.io",
+//     "x-rapidapi-key": "082cef903c18d9f143583be71fb6bd86",
+//   },
+// }).catch((error) => console.log("error", error));
 
-const watchList = ref<SaveType[]>([]);
+const config = useRuntimeConfig();
 
-onMounted(() => {
-  const storedList = localStorage.getItem("watchList");
-  if (storedList) {
-    watchList.value = JSON.parse(storedList);
+const teamData = await useFetch(
+  "https://v3.football.api-sports.io/teams?id=33",
+  {
+    method: "GET",
+    headers: {
+      "x-rapidapi-host": "v3.football.api-sports.io",
+      "x-rapidapi-key": "082cef903c18d9f143583be71fb6bd86",
+      // "x-rapidapi-key": config.public.FOOTBALL_API_KEY as string,
+    },
   }
-});
+);
 
-const handleWatchListRemove = (id: number) => {
-  watchList.value = removeFromList(id, "watchList");
-};
+const statistics = await useFetch(
+  "https://v3.football.api-sports.io/teams/statistics",
+  {
+    method: "GET",
+    headers: {
+      "x-rapidapi-host": "v3.football.api-sports.io",
+      "x-rapidapi-key": "082cef903c18d9f143583be71fb6bd86",
+      // "x-rapidapi-key": config.public.FOOTBALL_API_KEY as string,
+    },
+    params: {
+      team: 33,
+      league: 39,
+      season: 2022,
+    },
+  }
+);
+
+const standing = await useFetch("https://v3.football.api-sports.io/standings", {
+  method: "GET",
+  headers: {
+    "x-rapidapi-host": "v3.football.api-sports.io",
+    "x-rapidapi-key": "082cef903c18d9f143583be71fb6bd86",
+    // "x-rapidapi-key": config.public.FOOTBALL_API_KEY as string,
+  },
+  params: {
+    league: 39,
+    season: 2022,
+  },
+});
 </script>
 
 <template>
   <div>
     <div>
-      <div
-        v-if="watchList.length"
-        class="grid grid-cols-5 gap-2 justify-center items-center m-4"
-      >
-        <div
-          v-for="item in watchList"
-          :key="item.id"
-          class="w-50 h-70 m-2 p-1 flex flex-col"
-        >
-          <div class="flex gap-2">
-            <NuxtImg
-              :src="
-                item.poster_path
-                  ? `https://image.tmdb.org/t/p/w300${item.poster_path}`
-                  : '/images/default-movie-poster.jpg'
-              "
-              class="rounded-1 b-10 b-gray-1"
-              width="150"
-              height="210"
-            />
-            <div class="flex flex-col gap-2 justify-between">
-              <div>
-                <Chip
-                  v-if="item.vote_average"
-                  :label="item.vote_average.toFixed(1)"
-                  class="h-6 text-xs bg-blue!"
-                />
-              </div>
-              <div class="flex flex-col gap-2">
-                <div
-                  class="i-material-symbols-remove-rounded text-gray text-2xl cursor-pointer hover:text-green"
-                  @click="() => handleWatchListRemove(item.id)"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="text-sm my-1">
-            {{ item.title ?? item.name }}
-          </div>
-        </div>
-      </div>
-      <div v-else>No saved items.</div>
+      <NuxtImg src="https://media.api-sports.io/football/teams/33.png" />
     </div>
+    result
+    <!-- <pre>{{ teamData }}</pre>
+    <pre>{{ statistics }}</pre> -->
+    <pre>{{ standing }}</pre>
   </div>
 </template>

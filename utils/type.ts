@@ -1,10 +1,7 @@
-export type SaveType = {
-  id: number;
-  title?: string;
-  name?: string;
-
-  poster_path: string;
-  vote_average: number;
+export type ActiveStock = {
+  symbol: string;
+  name: string;
+  change: number;
+  price: number;
+  changesPercentage: number;
 };
-
-export type LocalList = "watchList" | "favoriteList";
